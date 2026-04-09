@@ -43,6 +43,22 @@ git clone https://github.com/Lelequyngocquy/live-code-api
 cd live-code-api
 ```
 
+`or create a new one copying this form`
+
+```bash
+PORT=
+NODE_ENV=development
+# Database
+DB_HOST=
+DB_PORT=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+# Redis
+REDIS_HOST=
+REDIS_PORT=
+```
+
 2. Configure environment variables:
 
 ```bash
