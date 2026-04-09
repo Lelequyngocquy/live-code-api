@@ -1,7 +1,7 @@
 const { Worker } = require("bullmq");
 const redisConnection = require("../config/redis");
 const db = require("../config/db");
-const { executeCode } = require("../utils/executor");
+const { executeCode } = require("../services/executor");
 
 const executionWorker = new Worker(
   "code-executions",

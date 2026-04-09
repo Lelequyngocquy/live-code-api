@@ -19,9 +19,7 @@ const createSession = async (req, res) => {
     });
   } catch (error) {
     console.error("___[FROM CONTROLLERS] Error creating session:", error);
-    res
-      .status(500)
-      .json({ error: "___[FROM CONTROLLERS] Internal Server Error" });
+    res.status(500).json({ error: "[FROM CONTROLLERS] Internal Server Error" });
   }
 };
 
@@ -36,7 +34,7 @@ const updateSession = async (req, res) => {
     );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: "___Session not found" });
+      return res.status(404).json({ error: "Session not found" });
     }
 
     res.status(200).json({
@@ -45,7 +43,7 @@ const updateSession = async (req, res) => {
     });
   } catch (error) {
     console.error("___[FROM CONTROLLERS] Error updating session:", error);
-    res.status(500).json({ error: "___Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -60,7 +58,7 @@ const runSession = async (req, res) => {
     );
 
     if (sessionResult.rowCount === 0) {
-      return res.status(404).json({ error: "___Session not found" });
+      return res.status(404).json({ error: "Session not found" });
     }
     const { language, source_code } = sessionResult.rows[0];
 
@@ -86,7 +84,7 @@ const runSession = async (req, res) => {
     });
   } catch (error) {
     console.error("___[FROM CONTROLLERS] Error running session:", error);
-    res.status(500).json({ error: "___Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

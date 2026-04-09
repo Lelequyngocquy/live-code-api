@@ -28,7 +28,7 @@ const getExecutionStatus = async (req, res) => {
       "___[FROM CONTROLLERS] Error fetching execution status:",
       error,
     );
-    res.status(500).json({ error: "___Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

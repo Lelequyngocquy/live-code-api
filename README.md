@@ -101,7 +101,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ### 2. Update (Autosave) Code
 
-- **Endpoint:** `PUT /code-sessions/:id`
+- **Endpoint:** `PATCH /code-sessions/:id`
 - **Payload:**
 
 ```json
