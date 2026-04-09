@@ -48,14 +48,14 @@ const executeCode = async (language, sourceCode) => {
       // add timeout to prevent infinite loops (5 seconds)
       const timeoutId = setTimeout(() => {
         child.kill("SIGKILL"); // kill the process if it exceeds time limit
-        reject(new Error("___Timeout: Execution Time Limit Exceeded (5000ms)"));
+        reject(new Error("Timeout: Execution Time Limit Exceeded (5000ms)"));
       }, 5000);
 
       child.on("error", (err) => {
         clearTimeout(timeoutId);
         reject(
           new Error(
-            `___System Error: Failed to execute '${command}'. Error: ${err.message}`,
+            `System Error: Failed to execute '${command}'. Error: ${err.message}`,
           ),
         );
       });

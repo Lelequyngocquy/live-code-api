@@ -68,13 +68,7 @@ REDIS_PORT=
 3. Launch the application:
 
 ```bash
-docker-compose up --build #a combination of docker-compose build and docker-compose up
-```
-
-`or`
-
-```bash
-npm run dev #if you wanna run it directly without docker image, ALL 4 LANG SHOULD BE INSTALLED IN YOUR COMPUTER
+docker-compose up --build
 ```
 
 The API will be accessible at: [http://localhost:3000](http://localhost:3000).
@@ -97,6 +91,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
+  //respone
   "session_id": "sesion_id",
   "status": "ACTIVE"
 }
@@ -109,8 +104,6 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 - **Endpoint:** `PUT /code-sessions/:id`
 - **Payload:**
 
-`for js lang`
-
 ```json
 {
   "language": "javascript",
@@ -118,37 +111,11 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 }
 ```
 
-`or for python lang`
-
-```json
-{
-  "language": "python",
-  "source_code": "print('Hi guys! Im Le Ngoc Quy!.')"
-}
-```
-
-`or for php lang`
-
-```json
-{
-  "language": "php",
-  "source_code": "<?php\necho 'hello, i am Que Ngoc Ly! ';"
-}
-```
-
-`or for ruby lang`
-
-```json
-{
-  "language": "ruby",
-  "source_code": "puts 'HELLO I AM Ly Ngoc Que!'"
-}
-```
-
 - **Respond:**
 
 ```json
 {
+  //respone
   "session_id": "session_id",
   "status": "ACTIVE"
 }
@@ -162,6 +129,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
+  //respone
   "execution_id": "execution_id",
   "status": "QUEUED"
 }
@@ -175,6 +143,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
+  //respone
   "execution_id": "execution_id",
   "status": "COMPLETED",
   "stdout": "YOUR_OUT_PUT_AFTER_SERVER_PROCESSES_AND_RETURNED",
@@ -185,7 +154,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ### 5. Results for one session! (of course, it works with any new session)
 
-- **Javascript Example:**
+- **Javascript Examples:**
   `auto save:`
   ![2. Auto save WITH JS](/images/2.auto_save_js.png)
   `run code:`
@@ -193,29 +162,35 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
   `get result:`
   ![4. get result WITH JS](/images/4.result_js.png)
 
-- **Pyhton Example:**
+- **Pyhton Examples:**
   `auto save:`
-  ![2. Auto save WITH PYTHON](/images/2.auto_save_python.png)
+  ![5. Auto save WITH PYTHON](/images/2.auto_save_python.png)
   `run code:`
-  ![3. run code WITH PYTHON](/images/3.run_python.png)
+  ![6. run code WITH PYTHON](/images/3.run_python.png)
   `get result:`
-  ![4. get result WITH PYTHON](/images/4.result_python.png)
+  ![7. get result WITH PYTHON](/images/4.result_python.png)
 
-- **PHP Example:**
+- **PHP Examples:**
   `auto save:`
-  ![2. Auto save WITH PHP](/images/2.auto_save_php.png)
+  ![8. Auto save WITH PHP](/images/2.auto_save_php.png)
   `run code:`
-  ![3. run code WITH PHP](/images/3.run_php.png)
+  ![9. run code WITH PHP](/images/3.run_php.png)
   `get result:`
-  ![4. get result WITH PHP](/images/4.result_php.png)
+  ![10. get result WITH PHP](/images/4.result_php.png)
 
-- **RUBY Example:**
+- **Ruby Examples:**
   `auto save:`
-  ![2. Auto save WITH RUBY](/images/2.auto_save_ruby.png)
+  ![11. Auto save WITH RUBY](/images/2.auto_save_ruby.png)
   `run code:`
-  ![3. run code WITH RUBY](/images/3.run_ruby.png)
+  ![12. run code WITH RUBY](/images/3.run_ruby.png)
   `get result:`
-  ![4. get result WITH RUBY](/images/4.result_ruby.png)
+  ![13. get result WITH RUBY](/images/4.result_ruby.png)
+
+- **TIMEOUT Examples:**
+  `try an infinity loop:`
+  ![14. create an infinity loop](/images/5.timeout1.png)
+  `get result:`
+  ![15. result of an infinity loop](/images/5.timeout3.png)
 
 ## Design Considerations
 
