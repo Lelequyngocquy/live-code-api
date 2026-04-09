@@ -39,8 +39,8 @@ The architecture is decoupled into the following components:
 1. Clone the repository:
 
 ```bash
-git clone <your-repo-url>
-cd live_code
+git clone https://github.com/Lelequyngocquy/live-code-api
+cd live-code-api
 ```
 
 2. Configure environment variables:
@@ -55,7 +55,7 @@ cp .env.example .env
 docker-compose up --build
 ```
 
-The API will be accessible at: [http://localhost:3001](http://localhost:3001) (mapped from port 3000 inside the container).
+The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ## API Documentation
 
@@ -67,7 +67,7 @@ The API will be accessible at: [http://localhost:3001](http://localhost:3001) (m
 ```json
 {
   "language": "python",
-  "source_code": "..."
+  "source_code": ""
 }
 ```
 
@@ -78,9 +78,37 @@ The API will be accessible at: [http://localhost:3001](http://localhost:3001) (m
 
 ```json
 {
-  "source_code": "..."
+  "language": "javascript",
+  "source_code": "console.log('Whatsup, my name is Ngoc Quy');"
 }
 ```
+
+`or`
+
+```json
+{
+  "language": "python",
+  "source_code": "print('Hi Edtronaut! Im Le Ngoc Quy!.')"
+}
+```
+
+`or`
+
+````json
+{
+    "language": "php",
+    "source_code": "<?php\necho 'hello, i am Que Ngoc Ly! ';"
+}
+```
+
+`or`
+
+```json
+{
+    "language": "ruby",
+    "source_code": "puts 'HELLO I AM Ly Ngoc Que!'"
+}
+````
 
 ### 3. Execute Code
 
@@ -101,4 +129,4 @@ The API will be accessible at: [http://localhost:3001](http://localhost:3001) (m
 
 ---
 
-**Author:** [Your Name] - edtronaut@gmail.com
+**Author:** Le Ngoc Quy - lengocquytdts@gmail.com
