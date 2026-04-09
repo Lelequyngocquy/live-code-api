@@ -43,6 +43,12 @@ git clone https://github.com/Lelequyngocquy/live-code-api
 cd live-code-api
 ```
 
+2. Configure environment variables:
+
+```bash
+cp .env.example .env
+```
+
 `or create a new one copying this form`
 
 ```bash
@@ -59,16 +65,16 @@ REDIS_HOST=
 REDIS_PORT=
 ```
 
-2. Configure environment variables:
-
-```bash
-cp .env.example .env
-```
-
 3. Launch the application:
 
 ```bash
-docker-compose up --build
+docker-compose up --build #a combination of docker-compose build and docker-compose up
+```
+
+`or`
+
+```bash
+npm run dev #if you wanna run it directly without docker image, ALL 4 LANG SHOULD BE INSTALLED IN YOUR COMPUTER
 ```
 
 The API will be accessible at: [http://localhost:3000](http://localhost:3000).

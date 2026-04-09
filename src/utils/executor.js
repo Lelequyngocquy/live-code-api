@@ -21,7 +21,7 @@ const executeCode = async (language, sourceCode) => {
     command = "node";
   } else if (language === "php") {
     fileName = `${executionId}.php`;
-    command = "php"; // Đảm bảo PHP dùng đúng lệnh php
+    command = "php";
   } else if (language === "ruby") {
     fileName = `${executionId}.rb`;
     command = "ruby";
