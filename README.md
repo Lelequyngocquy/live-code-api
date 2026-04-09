@@ -91,7 +91,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
-  //respone
+  //respond
   "session_id": "sesion_id",
   "status": "ACTIVE"
 }
@@ -115,7 +115,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
-  //respone
+  //respond
   "session_id": "session_id",
   "status": "ACTIVE"
 }
@@ -129,7 +129,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
-  //respone
+  //respond
   "execution_id": "execution_id",
   "status": "QUEUED"
 }
@@ -143,7 +143,7 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
-  //respone
+  //respond
   "execution_id": "execution_id",
   "status": "COMPLETED",
   "stdout": "YOUR_OUT_PUT_AFTER_SERVER_PROCESSES_AND_RETURNED",
