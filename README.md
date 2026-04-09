@@ -66,15 +66,28 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ```json
 {
-  "language": "python",
+  "language": "python", // Content-Type: application/json (this header is required)
   "source_code": ""
 }
 ```
+
+`receive a new session_id from server (backend) with status 201`
+
+```json
+{
+  "session_id": "sesion_id",
+  "status": "ACTIVE"
+}
+```
+
+![1. Create a new sesion](/images/1.new_session.png)
 
 ### 2. Update (Autosave) Code
 
 - **Endpoint:** `PUT /code-sessions/:id`
 - **Payload:**
+
+`for js lang`
 
 ```json
 {
@@ -83,42 +96,104 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 }
 ```
 
-`or`
+`or for python lang`
 
 ```json
 {
   "language": "python",
-  "source_code": "print('Hi Edtronaut! Im Le Ngoc Quy!.')"
+  "source_code": "print('Hi guys! Im Le Ngoc Quy!.')"
 }
 ```
 
-`or`
-
-````json
-{
-    "language": "php",
-    "source_code": "<?php\necho 'hello, i am Que Ngoc Ly! ';"
-}
-```
-
-`or`
+`or for php lang`
 
 ```json
 {
-    "language": "ruby",
-    "source_code": "puts 'HELLO I AM Ly Ngoc Que!'"
+  "language": "php",
+  "source_code": "<?php\necho 'hello, i am Que Ngoc Ly! ';"
 }
-````
+```
+
+`or for ruby lang`
+
+```json
+{
+  "language": "ruby",
+  "source_code": "puts 'HELLO I AM Ly Ngoc Que!'"
+}
+```
+
+- **Respond:**
+
+```json
+{
+  "session_id": "session_id",
+  "status": "ACTIVE"
+}
+```
 
 ### 3. Execute Code
 
 - **Endpoint:** `POST /code-sessions/:id/run`
 - **Description:** Submits code to the execution queue. Returns an `execution_id`.
+- **Respond:**
+
+```json
+{
+  "execution_id": "execution_id",
+  "status": "QUEUED"
+}
+```
 
 ### 4. Retrieve Execution Results
 
 - **Endpoint:** `GET /executions/:execution_id`
 - **Description:** Returns execution status (`COMPLETED`, `FAILED`, `TIMEOUT`), `stdout`, `stderr`, and execution time in milliseconds.
+- **Respond:**
+
+```json
+{
+  "execution_id": "execution_id",
+  "status": "COMPLETED",
+  "stdout": "YOUR_OUT_PUT_AFTER_SERVER_PROCESSES_AND_RETURNED",
+  "stderr": "",
+  "execution_time_ms": 123
+}
+```
+
+### 5. Results for one session! (of course, it works with any new session)
+
+- **Javascript Example:**
+  `auto save:`
+  ![2. Auto save WITH JS](/images/2.auto_save_js.png)
+  `run code:`
+  ![3. run code WITH JS](/images/3.run_js.png)
+  `get result:`
+  ![4. get result WITH JS](/images/4.result_js.png)
+
+- **Pyhton Example:**
+  `auto save:`
+  ![2. Auto save WITH PYTHON](/images/2.auto_save_python.png)
+  `run code:`
+  ![3. run code WITH PYTHON](/images/3.run_python.png)
+  `get result:`
+  ![4. get result WITH PYTHON](/images/4.result_python.png)
+
+- **PHP Example:**
+  `auto save:`
+  ![2. Auto save WITH PHP](/images/2.auto_save_php.png)
+  `run code:`
+  ![3. run code WITH PHP](/images/3.run_php.png)
+  `get result:`
+  ![4. get result WITH PHP](/images/4.result_php.png)
+
+- **RUBY Example:**
+  `auto save:`
+  ![2. Auto save WITH RUBY](/images/2.auto_save_ruby.png)
+  `run code:`
+  ![3. run code WITH RUBY](/images/3.run_ruby.png)
+  `get result:`
+  ![4. get result WITH RUBY](/images/4.result_ruby.png)
 
 ## Design Considerations
 
