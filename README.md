@@ -208,42 +208,62 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 ### 5. Results for one session! (of course, it works with any new session)
 
 - **Javascript Examples:**
-  auto save:
-  ![2. Auto save WITH JS](/images/2.auto_save_js.png)
-  run code:
-  ![3. run code WITH JS](/images/3.run_js.png)
-  get result:
-  ![4. get result WITH JS](/images/4.result_js.png)
+  - **_auto save:_**
+    ![2. Auto save WITH JS](/images/2.auto_save_js.png)
+  - **_run code:_**
+    ![3. run code WITH JS](/images/3.run_js.png)
+  - **_get result:_**
+    ![4. get result WITH JS](/images/4.result_js.png)
 
 - **Pyhton Examples:**
-  auto save:
-  ![5. Auto save WITH PYTHON](/images/2.auto_save_python.png)
-  run code:
-  ![6. run code WITH PYTHON](/images/3.run_python.png)
-  get result:
-  ![7. get result WITH PYTHON](/images/4.result_python.png)
+  - **_auto save:_**
+    ![5. Auto save WITH PYTHON](/images/2.auto_save_python.png)
+  - **_run code:_**
+    ![6. run code WITH PYTHON](/images/3.run_python.png)
+  - **_get result:_**
+    ![7. get result WITH PYTHON](/images/4.result_python.png)
 
 - **PHP Examples:**
-  auto save:
-  ![8. Auto save WITH PHP](/images/2.auto_save_php.png)
-  run code:
-  ![9. run code WITH PHP](/images/3.run_php.png)
-  get result:
-  ![10. get result WITH PHP](/images/4.result_php.png)
+  - **_auto save:_**
+    ![8. Auto save WITH PHP](/images/2.auto_save_php.png)
+  - **_run code:_**
+    ![9. run code WITH PHP](/images/3.run_php.png)
+  - **_get result:_**
+    ![10. get result WITH PHP](/images/4.result_php.png)
 
 - **Ruby Examples:**
-  auto save:
-  ![11. Auto save WITH RUBY](/images/2.auto_save_ruby.png)
-  run code:
-  ![12. run code WITH RUBY](/images/3.run_ruby.png)
-  get result:
-  ![13. get result WITH RUBY](/images/4.result_ruby.png)
+  - **_auto save:_**
+    ![11. Auto save WITH RUBY](/images/2.auto_save_ruby.png)
+  - **_run code:_**
+    ![12. run code WITH RUBY](/images/3.run_ruby.png)
+  - **_get result:_**
+    ![13. get result WITH RUBY](/images/4.result_ruby.png)
 
 - **TIMEOUT Examples:**
-  try an infinite loop:
-  ![14. create an infinite loop](/images/5.timeout1.png)
-  get result:
-  ![15. result of an infinite loop](/images/5.timeout3.png)
+  - **_try an infinite loop:_**
+    ![14. create an infinite loop](/images/5.timeout1.png)
+  - **_get result:_**
+    ![15. result of an infinite loop](/images/5.timeout3.png)
+
+## Database Access
+
+- **Note:** When successfully running the docker-compose.yml (with 3 containers inside), then it is able to access the database through docker image
+- **Bash Command:**
+
+```bash
+docker exec -it CONTAINER_NAME psql -U DB_USER -d DB_NAME
+# check on your .env file and docker-compose.yml to use the right parameters here! EX:
+# docker exec -it live-code-db psql -U postgres -d livecode_db
+```
+
+![16. postgresql inside docker image](/images/6.db_check.png)
+
+```bash
+#sql query example:
+select * from code_session;
+```
+
+![17. table check](/images/6.db_table_check.png)
 
 ## Design Considerations
 
