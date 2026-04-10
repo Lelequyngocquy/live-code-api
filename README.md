@@ -268,7 +268,7 @@ docker exec -it CONTAINER_NAME psql -U DB_USER -d DB_NAME
 
 ```bash
 #sql query example:
-select * from code_session;
+select * from code_sessions;
 ```
 
 ![17. table check](/images/6.db_table_check.png)
