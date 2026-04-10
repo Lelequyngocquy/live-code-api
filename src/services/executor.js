@@ -42,7 +42,7 @@ const executeCode = async (language, sourceCode) => {
     return await new Promise((resolve, reject) => {
       // run the code in a child process
       const child = spawn(command, args, {
-        env: { ...process.env, PYTHONIOENCODING: "utf-8" }, // ensure Python outputs UTF-8
+        env: { ...process.env, PYTHONIOENCODING: "utf-8" },
       });
 
       // add timeout to prevent infinite loops (5 seconds)

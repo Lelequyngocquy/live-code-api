@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const rateLimit = require("express-rate-limit");
+
 require("dotenv").config();
 
 const app = express();
@@ -12,6 +12,7 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "UP" });
 });
 
+const rateLimit = require("express-rate-limit");
 const runLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 10, // maximum 10 requests/ip/minute

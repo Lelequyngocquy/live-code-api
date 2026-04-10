@@ -10,13 +10,13 @@ const worker = new Worker(
     const { execution_id, source_code, language } = job.data;
 
     try {
-      // 1. Chuyển sang RUNNING
+      // update execution status to RUNNING
       await Execution.updateResult(execution_id, "RUNNING");
 
-      // 2. Thực thi code
+      // execute the code and get results (stdout, stderr, execution time)
       const result = await executor.executeCode(language, source_code);
 
-      // 3. Cập nhật thành công (Lưu ý: Thêm "COMPLETED" vì executor không trả về status)
+      // update execution record in DB with results and status COMPLETED
       await Execution.updateResult(
         execution_id,
         "COMPLETED",
@@ -25,7 +25,7 @@ const worker = new Worker(
         result.executionTimeMs,
       );
     } catch (error) {
-      // 4. BẮT LỖI Ở ĐÂY: Nếu Timeout hoặc lỗi, cập nhật trạng thái FAILED/TIMEOUT vào DB
+      // 4. error handling: update execution status to FAILED or TIMEOUT based on error type
       const isTimeout = error.message.includes("Timeout");
       await Execution.updateResult(
         execution_id,
@@ -35,7 +35,7 @@ const worker = new Worker(
         null,
       );
 
-      // Vẫn quăng lỗi để BullMQ biết job này đã fail
+      // show error in worker logs for debugging
       throw error;
     }
   },
