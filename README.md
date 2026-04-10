@@ -11,15 +11,6 @@ A scalable, asynchronous remote code execution system supporting multiple progra
   - **Session Persistence:** Continuously syncs code with a PostgreSQL database.
 - **Containerized Deployment:** Fully Dockerized environment for consistent setup across development and production.
 
-## System Architecture
-
-The architecture is decoupled into the following components:
-
-1. **API Server (Express):** Handles user requests, manages sessions, and dispatches execution tasks.
-2. **Message Broker (Redis):** Stores pending execution jobs.
-3. **Worker Service:** Consumes jobs, creates temporary source files, executes code via child processes, and captures output.
-4. **Database (PostgreSQL):** Stores session metadata and detailed execution results (stdout, stderr, status, execution time).
-
 ## Technology Stack
 
 - **Backend:** Node.js, Express
@@ -27,6 +18,67 @@ The architecture is decoupled into the following components:
 - **Queue & Caching:** Redis, BullMQ
 - **Containerization:** Docker, Docker Compose
 - **Execution Environments:** Python 3, PHP, Ruby, Node.js
+
+## System Architecture
+
+The system is designed based on the Producer-Consumer model using a Message Queue to ensure Asynchronous Execution. This architecture prevents the API from being blocked by long-running or resource-intensive code execution tasks.
+
+### 1. High-Level Diagram
+
+The system consists of four primary components working in orchestration:
+
+- **API Server (Producer):** Handles incoming source code, manages sessions, and dispatches execution tasks to the queue.
+
+- **Redis (Message Broker):** Acts as a buffer, storing execution jobs reliably until a worker is available.
+
+- **Worker (Consumer):** Listens for jobs in Redis, coordinates the execution process, and updates the final results.
+
+- **PostgreSQL (Database):** Provides persistent storage for session metadata and detailed execution history.
+
+### 2. Request Flow
+
+The end-to-end flow of a code execution request is as follows:
+
+- **Submit:** The user sends source code via `POST /code-sessions/:id/run`.
+
+- **Queueing:** The API creates an execution record with a `QUEUED` status and pushes a Job into BullMQ.
+
+- **Processing:** A Worker picks up the Job, transitions the status to `RUNNING`, and invokes the Executor Service.
+
+- **Execution:** The Executor generates a temporary file and runs the code in an isolated child process with strict Timeout and Memory Limits.
+
+- **Result:** Upon completion, the Worker captures stdout/stderr, calculates execution time, and updates the status to `COMPLETED` or `FAILED`.
+
+- **Polling:** The client retrieves the final result via the `GET /executions/:id` endpoint.
+
+---
+
+## Folder Structure Explanation
+
+The project follows a modular structure to ensure clear Separation of Concerns:
+
+- **src/config/**: Contains system configurations, including Database and Redis connection setups.
+
+- **src/controllers/**: Handles the API layer logic, managing request inputs and formatting responses.
+
+- **src/routes/**: Defines the API endpoints as specified in the technical requirements.
+- **src/models/**: Defines the data schema for PostgreSQL (Sessions and Executions).
+- **src/queues/**: Manages BullMQ initialization and producer logic for job dispatching.
+- **src/services/**: The core engine responsible for spawning child processes and enforcing resource constraints.
+
+- **src/workers/**: Contains the consumer logic that processes jobs in the background.
+
+- **src/app.js**: Initializes the Express application and global middlewares (e.g., Rate Limiting for abuse protection).
+
+---
+
+## Design Decisions & Safety
+
+- **Asynchronous Reliability:** By offloading execution to background workers, the system remains responsive even under heavy load.
+
+- **Resource Sandboxing:** Strict enforcement of time and memory limits prevents infinite loops and excessive resource usage from crashing the server.
+
+- **Observability:** Every stage of the execution lifecycle (`QUEUED` → `RUNNING` → `COMPLETED`) is logged and tracked with timestamps for debugging and monitoring.
 
 ## Installation and Setup
 
@@ -87,11 +139,12 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 }
 ```
 
-`receive a new session_id from server (backend) with status 201`
+- **Response:**
+  receive a new `session_id` from server (backend) with status 201
 
 ```json
 {
-  //respond
+  //response
   "session_id": "sesion_id",
   "status": "ACTIVE"
 }
@@ -111,11 +164,11 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 }
 ```
 
-- **Respond:**
+- **Response:**
 
 ```json
 {
-  //respond
+  //response
   "session_id": "session_id",
   "status": "ACTIVE"
 }
@@ -125,11 +178,11 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 - **Endpoint:** `POST /code-sessions/:id/run`
 - **Description:** Submits code to the execution queue. Returns an `execution_id`.
-- **Respond:**
+- **Response:**
 
 ```json
 {
-  //respond
+  //response
   "execution_id": "execution_id",
   "status": "QUEUED"
 }
@@ -139,11 +192,11 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 - **Endpoint:** `GET /executions/:execution_id`
 - **Description:** Returns execution status (`COMPLETED`, `FAILED`, `TIMEOUT`), `stdout`, `stderr`, and execution time in milliseconds.
-- **Respond:**
+- **Response:**
 
 ```json
 {
-  //respond
+  //response
   "execution_id": "execution_id",
   "status": "COMPLETED",
   "stdout": "YOUR_OUT_PUT_AFTER_SERVER_PROCESSES_AND_RETURNED",
@@ -155,42 +208,42 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 ### 5. Results for one session! (of course, it works with any new session)
 
 - **Javascript Examples:**
-  `auto save:`
+  auto save:
   ![2. Auto save WITH JS](/images/2.auto_save_js.png)
-  `run code:`
+  run code:
   ![3. run code WITH JS](/images/3.run_js.png)
-  `get result:`
+  get result:
   ![4. get result WITH JS](/images/4.result_js.png)
 
 - **Pyhton Examples:**
-  `auto save:`
+  auto save:
   ![5. Auto save WITH PYTHON](/images/2.auto_save_python.png)
-  `run code:`
+  run code:
   ![6. run code WITH PYTHON](/images/3.run_python.png)
-  `get result:`
+  get result:
   ![7. get result WITH PYTHON](/images/4.result_python.png)
 
 - **PHP Examples:**
-  `auto save:`
+  auto save:
   ![8. Auto save WITH PHP](/images/2.auto_save_php.png)
-  `run code:`
+  run code:
   ![9. run code WITH PHP](/images/3.run_php.png)
-  `get result:`
+  get result:
   ![10. get result WITH PHP](/images/4.result_php.png)
 
 - **Ruby Examples:**
-  `auto save:`
+  auto save:
   ![11. Auto save WITH RUBY](/images/2.auto_save_ruby.png)
-  `run code:`
+  run code:
   ![12. run code WITH RUBY](/images/3.run_ruby.png)
-  `get result:`
+  get result:
   ![13. get result WITH RUBY](/images/4.result_ruby.png)
 
 - **TIMEOUT Examples:**
-  `try an infinity loop:`
-  ![14. create an infinity loop](/images/5.timeout1.png)
-  `get result:`
-  ![15. result of an infinity loop](/images/5.timeout3.png)
+  try an infinite loop:
+  ![14. create an infinite loop](/images/5.timeout1.png)
+  get result:
+  ![15. result of an infinite loop](/images/5.timeout3.png)
 
 ## Design Considerations
 
@@ -201,4 +254,4 @@ The API will be accessible at: [http://localhost:3000](http://localhost:3000).
 
 ---
 
-**Author:** Le Ngoc Quy - lengocquytdts@gmail.com
+**Author:** Ngoc Quy Le - lengocquytdts@gmail.com

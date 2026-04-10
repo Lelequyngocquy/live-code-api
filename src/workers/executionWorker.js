@@ -1,79 +1,56 @@
 const { Worker } = require("bullmq");
 const redisConnection = require("../config/redis");
-const db = require("../config/db");
-const { executeCode } = require("../services/executor");
+const Execution = require("../models/Execution");
+const executor = require("../services/executor");
 
-const executionWorker = new Worker(
+// init worker to process code execution jobs from the "code-executions" queue
+const worker = new Worker(
   "code-executions",
   async (job) => {
-    const { execution_id, session_id, source_code, language } = job.data;
-    console.log(
-      `~~~[FROM WORKERS] Job ${job.id} started for execution_id: ${execution_id} (Language: ${language})`,
-    );
+    const { execution_id, source_code, language } = job.data;
 
     try {
-      await db.query("UPDATE executions SET status = $1 WHERE id = $2", [
-        "RUNNING",
+      // 1. Chuyển sang RUNNING
+      await Execution.updateResult(execution_id, "RUNNING");
+
+      // 2. Thực thi code
+      const result = await executor.executeCode(language, source_code);
+
+      // 3. Cập nhật thành công (Lưu ý: Thêm "COMPLETED" vì executor không trả về status)
+      await Execution.updateResult(
         execution_id,
-      ]);
-
-      // running user's code and capture output
-      let stdout = "";
-      let stderr = "";
-      let executionTimeMs = 0;
-      let status = "COMPLETED";
-
-      try {
-        const result = await executeCode(language, source_code);
-        stdout = result.stdout;
-        stderr = result.stderr;
-        executionTimeMs = result.executionTimeMs;
-
-        // if error apears
-        if (stderr.trim() !== "") {
-          status = "FAILED";
-        }
-      } catch (execError) {
-        // timeout or runtime error
-        status = execError.message.includes("Timeout") ? "TIMEOUT" : "FAILED";
-        stderr = execError.message;
-        executionTimeMs = 5000; // timeout limit
-      }
-
-      // update execution record in DB with status, output and execution time
-      await db.query(
-        "UPDATE executions SET status = $1, stdout = $2, stderr = $3, execution_time_ms = $4 WHERE id = $5",
-        [status, stdout, stderr, executionTimeMs, execution_id],
+        "COMPLETED",
+        result.stdout,
+        result.stderr,
+        result.executionTimeMs,
       );
-
-      console.log(
-        `~~~[FROM WORKERS] Job ${job.id} finished with status: ${status}.`,
-      );
-      return { status, stdout };
     } catch (error) {
-      console.error(`___[FROM WORKERS] Error in job ${job.id}:`, error);
-
-      // Lỗi này là lỗi của hệ thống DB/Worker, không phải do code của user sai
-      await db.query(
-        "UPDATE executions SET status = $1, stderr = $2 WHERE id = $3",
-        ["FAILED", "System Error: " + error.message, execution_id],
+      // 4. BẮT LỖI Ở ĐÂY: Nếu Timeout hoặc lỗi, cập nhật trạng thái FAILED/TIMEOUT vào DB
+      const isTimeout = error.message.includes("Timeout");
+      await Execution.updateResult(
+        execution_id,
+        isTimeout ? "TIMEOUT" : "FAILED",
+        null,
+        error.message,
+        null,
       );
+
+      // Vẫn quăng lỗi để BullMQ biết job này đã fail
       throw error;
     }
   },
-  {
-    connection: redisConnection,
-    concurrency: 5,
-  },
+  { connection: redisConnection },
 );
 
-// listen to worker events for logging
-executionWorker.on("completed", (job) => {
-  console.log(`~~~[FROM WORKERS] Job ${job.id} completed.`);
+// listen for worker events to log to terminal
+worker.on("completed", (job) => {
+  console.log(`~~~[FROM WORKER] Job ${job.id} completed successfully`);
 });
 
-executionWorker.on("failed", (job, err) => {
-  console.log(`___[FROM WORKERS] Job ${job.id} failed. Error: ${err.message}`);
+worker.on("failed", (job, err) => {
+  console.error(
+    `___[FROM WORKER] Job ${job.id} failed with error: ${err.message}`,
+  );
 });
 
-module.exports = executionWorker;
+module.exports = worker;
