@@ -52,17 +52,17 @@ cp .env.example .env
 `or create a new one copying this form`
 
 ```bash
-PORT=
+PORT=3000
 NODE_ENV=development
 # Database
-DB_HOST=
-DB_PORT=
-DB_USER=
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
 DB_PASSWORD=
-DB_NAME=
+DB_NAME=livecode_db
 # Redis
-REDIS_HOST=
-REDIS_PORT=
+REDIS_HOST=localhost
+REDIS_PORT=6379
 ```
 
 3. Launch the application:
