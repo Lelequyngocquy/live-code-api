@@ -21,7 +21,15 @@ A scalable, asynchronous remote code execution system supporting multiple progra
 
 ## System Architecture
 
-The system is designed based on the Producer-Consumer model using a Message Queue to ensure Asynchronous Execution. This architecture prevents the API from being blocked by long-running or resource-intensive code execution tasks.
+MVC Model:
+
+- **Model Layer:** Encapsulates database logic using Classes to interact with PostgreSQL, ensuring data integrity for sessions and executions.
+
+- **Controller Layer:** Orchestrates the flow between the client and the system, validating inputs and triggering the background processing queue.
+
+- **View Layer:** In this RESTful API project, the View layer is represented by the JSON response payloads. By decoupling the data logic (Model) from the presentation format (JSON), the system ensures that any client—whether it be a web dashboard or a mobile application—can consistently consume and display code execution results.
+
+- **Architecture Strategy:** Combines MVC with a Producer-Consumer pattern to handle long-running code execution tasks asynchronously without impacting API performance.
 
 ### 1. High-Level Diagram
 
